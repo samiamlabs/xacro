@@ -461,8 +461,8 @@ def is_valid_name(name):
     return False
 
 
-re_macro_arg = re.compile(r'''\s*([^\s:=]+?):?=(\^\|?)?((?:(?:'[^']*')?[^\s'"]*?)*)(?:\s+|$)(.*)''')
-#                           space   param    :=   ^|   <--      default      -->   space    rest
+re_macro_arg = re.compile(r'''\s*([^\s:=]+?):?=(\^\|?)?((?:(?:(?P<quote>['"]).*?(?P=quote))?[^\s'"]*?)*)(?:\s+|$)(.*)''')
+#                           space   param    :=   ^|   {default:     ((quoted string)      ?string   )*} space   rest
 def parse_macro_arg(s):
     """
     parse the first param spec from a macro parameter string s
@@ -476,7 +476,7 @@ def parse_macro_arg(s):
     m = re_macro_arg.match(s)
     if m:
         # there is a default value specified for param
-        param, forward, default, rest = m.groups()
+        param, forward, default, _, rest = m.groups()
         if not default: default = None
         return param, (param if forward else None, default), rest
     else:

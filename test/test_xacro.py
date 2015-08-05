@@ -202,7 +202,7 @@ class TestXacroFunctions(unittest.TestCase):
             self.assertEqual(r, rest, msg="'{0}' != '{1}' parsing {2}".format(r, rest, s))
 
         for forward in ['', '^', '^|']:
-            defaults = ['', "f('some string','some other')", "f('a b')"]
+            defaults = ['', '''f('some string',"some other")''', "f('a b')"]
             if forward == '^': defaults = ['']
             for default in defaults:
                 seps = ['=', ':='] if forward or default else ['']
